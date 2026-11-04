@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TonePi">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f0f1a">
+<link rel="manifest" href="static/manifest.json?v=4f85953c42">
+<link rel="apple-touch-icon" href="static/icons/icon-192.png?v=95acb0f43a">
+<link rel="icon" href="static/icons/icon-192.png?v=95acb0f43a">
+<title>TonePi Mobile</title>
+<link rel="stylesheet" href="static/css/mobile-app.css?v=7216f4a828">
+<link rel="stylesheet" href="static/css/zynthian-mobile.css?v=7d4d5820ab">
+</head>
+<body>
+
+<!-- SVG glyph set — agy round 2: 2px stroke, geometric, no emoji.
+     Zynthian-only symbols appended below (ic-back .. ic-rack) — every
+     id shared between the two original sprites was confirmed
+     byte-identical path data before merging, so only the Zynthian-only
+     ones needed carrying over (no duplicate <symbol> ids in one doc). -->
+<svg style="display:none">
+  <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h16"/></symbol>
+  <symbol id="ic-tuner" viewBox="0 0 24 24"><path d="M8 3v9a4 4 0 008 0V3M12 16v5"/></symbol>
+  <symbol id="ic-speaker" viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16.5 9a4 4 0 010 6M19 7a7.5 7.5 0 010 10"/></symbol>
+  <symbol id="ic-mute" viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6"/></symbol>
+  <symbol id="ic-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8V4z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-add" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="ic-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></symbol>
+  <symbol id="ic-save" viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5V4zM8 4v6h8V4M8 14h8v6H8z"/></symbol>
+  <symbol id="ic-load" viewBox="0 0 24 24"><path d="M4 7h5l2 2h9v9H4V7z"/></symbol>
+  <symbol id="ic-library" viewBox="0 0 24 24"><path d="M5 4v16M9 4v16M13 5l6 15"/></symbol>
+  <symbol id="ic-hook" viewBox="0 0 24 24"><path d="M9 3v10a3 3 0 006 0V8M15 8l3-3M15 8l3 3"/></symbol>
+  <symbol id="ic-scope" viewBox="0 0 24 24"><path d="M3 12h4l2-7 4 14 2-7h6"/></symbol>
+  <symbol id="ic-tele" viewBox="0 0 24 24"><rect x="3" y="10" width="4" height="10"/><rect x="10" y="5" width="4" height="15"/><rect x="17" y="13" width="4" height="7"/></symbol>
+  <symbol id="ic-raw" viewBox="0 0 24 24"><path d="M8 4L3 12l5 8M16 4l5 8-5 8M14 3l-4 18"/></symbol>
+  <symbol id="ic-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+  <symbol id="ic-chain" viewBox="0 0 24 24"><rect x="3" y="9" width="6" height="6"/><rect x="15" y="9" width="6" height="6"/><path d="M9 12h6"/></symbol>
+  <symbol id="ic-monitor" viewBox="0 0 24 24"><path d="M4 18L12 5l8 13H4z"/></symbol>
+  <symbol id="ic-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="4" height="4"/><rect x="10" y="4" width="4" height="4"/><rect x="16" y="4" width="4" height="4"/><rect x="4" y="10" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="16" y="10" width="4" height="4"/><rect x="4" y="16" width="4" height="4"/><rect x="10" y="16" width="4" height="4"/><rect x="16" y="16" width="4" height="4"/></symbol>
+  <symbol id="ic-gear" viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="4.5"/></symbol>
+  <symbol id="ic-amp" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></symbol>
+  <symbol id="ic-cab" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18"/><circle cx="12" cy="9" r="3"/><circle cx="12" cy="16" r="2"/></symbol>
+  <symbol id="ic-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0012 0M12 17v4M9 21h6"/></symbol>
+  <symbol id="ic-note" viewBox="0 0 24 24"><path d="M9 18V5l10-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM19 16a3 3 0 11-6 0 3 3 0 016 0z"/></symbol>
+  <symbol id="ic-song" viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></symbol>
+  <symbol id="ic-patch" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6h7M6 8.5v7M18 8.5v7M8.5 18h7"/></symbol>
+  <symbol id="ic-rec" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-ghost" viewBox="0 0 24 24"><path d="M5 20V11a7 7 0 0114 0v9l-2.5-2-2.5 2-2-2-2 2-2.5-2L5 20z"/></symbol>
+  <symbol id="ic-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.5" fill="currentColor"/></symbol>
+  <symbol id="ic-chevron-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="ic-chevron-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="ic-insert-l" viewBox="0 0 24 24"><path d="M13 5v14M6 8v8M4 12h4M17 12h4"/></symbol>
+  <symbol id="ic-insert-r" viewBox="0 0 24 24"><path d="M11 5v14M18 8v8M20 12h-4M3 12h4"/></symbol>
+  <symbol id="ic-dup" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="1"/><path d="M4 16V5a1 1 0 011-1h11"/></symbol>
+  <symbol id="ic-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="ic-rack" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1"/><rect x="3" y="11" width="18" height="5" rx="1"/><circle cx="7" cy="6.5" r="0.7" fill="currentColor" stroke="none"/><circle cx="7" cy="13.5" r="0.7" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-fader" viewBox="0 0 24 24"><path d="M6 4v16M12 4v16M18 4v16"/><rect x="4" y="14" width="4" height="3" rx="0.5" fill="currentColor" stroke="none"/><rect x="10" y="7" width="4" height="3" rx="0.5" fill="currentColor" stroke="none"/><rect x="16" y="11" width="4" height="3" rx="0.5" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-layers" viewBox="0 0 24 24"><path d="M12 4l8 4.5-8 4.5-8-4.5L12 4z"/><path d="M4 12.5L12 17l8-4.5"/></symbol>
+  <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+  <symbol id="ic-panic" viewBox="0 0 24 24"><path d="M12 3v10M12 18v.01"/><circle cx="12" cy="12" r="9"/></symbol>
+  <symbol id="ic-branch" viewBox="0 0 24 24"><path d="M6 4v8a4 4 0 004 4h4M14 20l4-4-4-4"/></symbol>
+  <symbol id="ic-move" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M7 7l-4 5 4 5M17 7l4 5-4 5"/></symbol>
+  <symbol id="ic-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+  <symbol id="ic-down" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></symbol>
+  <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></symbol>
+  <symbol id="ic-reboot" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v5h5"/></symbol>
+  <symbol id="ic-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2-8 4 16 2-8h6"/></symbol>
+</svg>
+
+<div class="phone">
+
+  <!-- ══ MODE FLIP: TonePi / Zynthian — always visible, owns the
+       safe-area/notch inset (see .hdr's reduced padding). ══ -->
+  <div class="mode-flip-wrap">
+    <div class="chain-toggle" id="modeToggle">
+      <button class="active" data-mode="tonepi" onclick="setAppMode('tonepi')">TonePi</button>
+      <button data-mode="zynthian" onclick="setAppMode('zynthian')">Zynthian</button>
+    </div>
+  </div>
+
+  <div id="app-tonepi">
+
+  <!-- ══ DESIGNER ══ -->
+  <div class="screen active" id="scr-designer">
+    <div class="hdr">
+      <button class="hdr-icon-btn" onclick="openSheet('of')"><svg class="ic"><use href="#ic-menu"/></svg></button>
+      <div class="hdr-title">
+        <div class="chain-name" id="hdrChainName">Loading&hellip;</div>
+        <div class="chain-sub" id="hdrChainSub">&nbsp;</div>
+      </div>
+      <button class="hdr-icon-btn" id="btnMasterMute" title="Mute/Unmute" onclick="toggleMasterMute()"><svg class="ic" id="masterMuteIc"><use href="#ic-speaker"/></svg></button>
+      <button class="hdr-icon-btn" title="Reload" onclick="loadChain()"><svg class="ic"><use href="#ic-tuner"/></svg></button>
+    </div>
+
+    <div class="headband">
+      <div class="meter"><span>IN</span><div class="meter-track"><div class="meter-fill" id="meterIn"></div></div><span class="meter-val mono" id="meterInVal">--</span></div>
+      <div class="meter"><span>OUT</span><div class="meter-track"><div class="meter-fill" id="meterOut"></div></div><span class="meter-val mono" id="meterOutVal">--</span></div>
+      <div class="divider"></div>
+      <!-- Snapshot switcher. Hidden until the chain has more than one.
+           The phone could already FOLLOW a hardware snapshot change but
+           had no way to make one. -->
+      <select class="snap-select" id="mobSnapSelect" style="display:none"
+              title="Switch snapshot"
+              onchange="mobSwitchSnapshot(parseInt(this.value, 10))"></select>
+      <div class="pill-dot off" id="wsDot"></div>
+      <span class="mono" style="white-space:nowrap" id="wsLabel">live</span>
+    </div>
+
+    <div class="chain-lane-wrap">
+      <div class="chain-lane-label">Signal Chain</div>
+      <div class="chain-lane" id="chainLane" data-drop-container="chain"></div>
+    </div>
+
+    <div class="param-area" id="paramArea">
+      <div class="placeholder"><svg class="ic"><use href="#ic-chain"/></svg>
+        <p>Loading chain from the Pi&hellip;</p></div>
+    </div>
+
+    <div class="fab-wrap">
+      <div class="fab stopped" id="fab" onclick="toggleFab()">
+        <svg class="ic" id="fabIc"><use href="#ic-play"/></svg><span id="fabLbl">Play</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PRESETS ══ -->
+  <div class="screen" id="scr-presets">
+    <div class="hdr">
+      <button class="hdr-icon-btn" id="presetsBack" style="display:none" onclick="renderPresetRoles()"><svg class="ic"><use href="#ic-chevron-l"/></svg></button>
+      <div class="hdr-title"><div class="chain-name" id="presetsTitle">Presets</div></div>
+    </div>
+    <div class="presets-scroll" id="presetsScroll">
+      <div class="placeholder"><svg class="ic"><use href="#ic-library"/></svg><p>Loading&hellip;</p></div>
+    </div>
+  </div>
+
+  <!-- ══ TOOLS ══ -->
+  <div class="screen" id="scr-tools">
+    <div class="hdr"><div class="hdr-title"><div class="chain-name">Tools</div></div></div>
+    <div class="tools-scroll" id="toolsScroll"></div>
+  </div>
+
+  <!-- ══ SYSTEM ══ -->
+  <div class="screen" id="scr-system">
+    <div class="hdr">
+      <button class="hdr-icon-btn" id="banksBack" style="display:none" onclick="renderBankList()"><svg class="ic"><use href="#ic-chevron-l"/></svg></button>
+      <div class="hdr-title"><div class="chain-name" id="banksTitle">Banks</div></div>
+      <button class="hdr-icon-btn" id="banksAdd" title="Add Bank" onclick="addBankPrompt()"><svg class="ic"><use href="#ic-add"/></svg></button>
+    </div>
+    <div class="presets-scroll" id="banksScroll">
+      <div class="placeholder"><svg class="ic"><use href="#ic-gear"/></svg><p>Loading&hellip;</p></div>
+    </div>
+    <div class="system-settings">
+      <div class="tools-section" style="padding-top:10px">System</div>
+      <div class="of-item" onclick="systemRecoverAudio()"><svg class="ic"><use href="#ic-pulse"/></svg>Recover Audio</div>
+      <div class="of-item" onclick="systemAction('reboot')"><svg class="ic"><use href="#ic-reboot"/></svg>Reboot</div>
+      <div class="of-item danger" style="border-bottom:0" onclick="systemAction('shutdown')"><svg class="ic"><use href="#ic-panic"/></svg>Shutdown</div>
+    </div>
+  </div>
+
+  <!-- Chain overflow sheet -->
+  <div class="backdrop" id="ofBackdrop" onclick="closeSheet('of')"></div>
+  <div class="sheet" id="ofSheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr"><h3>Chain</h3><div class="close-x" onclick="closeSheet('of')"><svg class="ic"><use href="#ic-close"/></svg></div></div>
+    <div class="sheet-body" style="padding-top:4px" id="ofBody">
+      <div class="of-item" onclick="saveChain()"><svg class="ic"><use href="#ic-save"/></svg>Save</div>
+      <div class="of-item disabled"><svg class="ic"><use href="#ic-save"/></svg>Save As&hellip; <span style="margin-left:auto;font-size:11px">desktop only</span></div>
+      <div class="of-item" onclick="closeSheet('of');setTab('presets')"><svg class="ic"><use href="#ic-library"/></svg>Load / Library</div>
+      <div class="of-item disabled"><svg class="ic"><use href="#ic-hook"/></svg>Hooks <span style="margin-left:auto;font-size:11px">desktop only</span></div>
+      <div class="of-item disabled"><svg class="ic"><use href="#ic-scope"/></svg>Analyze <span style="margin-left:auto;font-size:11px">desktop only</span></div>
+      <div class="of-item disabled"><svg class="ic"><use href="#ic-tele"/></svg>Telemetry <span style="margin-left:auto;font-size:11px">desktop only</span></div>
+      <div class="of-item disabled"><svg class="ic"><use href="#ic-raw"/></svg>Raw DSP <span style="margin-left:auto;font-size:11px">desktop only</span></div>
+      <div class="of-item" style="border-bottom:0;color:var(--cat-amp)" onclick="clearChain()"><svg class="ic"><use href="#ic-trash"/></svg>Clear Chain</div>
+    </div>
+  </div>
+
+  <!-- Block-picker sheet: level 1 = category list, level 2 = drilled-in blocks -->
+  <div class="backdrop" id="palBackdrop" onclick="closeSheet('pal')"></div>
+  <div class="sheet" id="palSheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr">
+      <div class="back-btn" id="palBack" style="display:none" onclick="renderCatList()"><svg class="ic"><use href="#ic-chevron-l"/></svg></div>
+      <h3 id="palTitle">Add Block</h3>
+      <div class="close-x" onclick="closeSheet('pal')"><svg class="ic"><use href="#ic-close"/></svg></div>
+    </div>
+    <div class="sheet-body" id="palBody">
+      <div class="placeholder"><svg class="ic"><use href="#ic-grid"/></svg><p>Loading block palette&hellip;</p></div>
+    </div>
+  </div>
+
+  <!-- Model/bank chooser sheet: NAM/Neural models, IR cabs, Wavetable +
+       Sample Guitar banks — huge lists (up to ~1200 real entries), so a
+       search box + grouped results, not an inline <select>. -->
+  <div class="backdrop" id="modelBackdrop" onclick="closeSheet('model')"></div>
+  <div class="sheet" id="modelSheet" style="max-height:88%">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr">
+      <h3 id="modelTitle">Choose</h3>
+      <button class="hdr-icon-btn" id="modelRefreshBtn" style="width:30px;height:30px;margin-left:auto;margin-right:8px" title="Rescan"><svg class="ic"><use href="#ic-tuner"/></svg></button>
+      <div class="close-x" onclick="closeSheet('model')"><svg class="ic"><use href="#ic-close"/></svg></div>
+    </div>
+    <div style="padding:0 14px 8px;flex-shrink:0"><input type="text" id="modelSearch" class="model-search" placeholder="Search by name or author&hellip;"></div>
+    <div class="sheet-body" id="modelBody" style="padding-top:0"></div>
+  </div>
+
+  <!-- Block-action sheet: long-press (mobile) / right-click (desktop) on a chain-lane chip -->
+  <div class="backdrop" id="actBackdrop" onclick="closeSheet('act')"></div>
+  <div class="sheet" id="actSheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr"><h3 id="actTitle">Block</h3><div class="close-x" onclick="closeSheet('act')"><svg class="ic"><use href="#ic-close"/></svg></div></div>
+    <div class="sheet-body" id="actBody" style="padding-top:4px"></div>
+  </div>
+
+  <div class="tabbar">
+    <button class="active" data-tab="designer" onclick="setTab('designer')"><svg class="ic"><use href="#ic-chain"/></svg>Designer</button>
+    <button data-tab="presets" onclick="setTab('presets')"><svg class="ic"><use href="#ic-library"/></svg>Presets</button>
+    <button data-tab="tools" onclick="setTab('tools')"><svg class="ic"><use href="#ic-grid"/></svg>Tools</button>
+    <button data-tab="system" onclick="setTab('system')"><svg class="ic"><use href="#ic-gear"/></svg>System</button>
+  </div>
+
+  </div><!-- /#app-tonepi -->
+
+  <div id="app-zynthian" style="display:none">
+
+  <!-- ══ RACK (default) ══ -->
+  <div class="screen active" id="scr-rack">
+    <div class="hdr">
+      <div class="hdr-title">
+        <div class="t-name" id="rackTitle">ZynEditor</div>
+        <div class="t-sub" id="rackSub">Connecting&hellip;</div>
+      </div>
+      <button class="hdr-panic" title="Panic (stop all engines' notes)" onclick="panicAllNotesOff()"><svg class="ic"><use href="#ic-panic"/></svg></button>
+    </div>
+
+    <div class="chain-strip-wrap">
+      <div class="chain-strip-label">Chains</div>
+      <div class="chain-strip" id="chainStrip"></div>
+    </div>
+
+    <div class="rack-scroll" id="rackScroll">
+      <div class="placeholder"><svg class="ic"><use href="#ic-rack"/></svg><p>Loading&hellip;</p></div>
+    </div>
+
+    <div class="rack-fab" id="rackFab" onclick="openAddProcSheet()"><svg class="ic"><use href="#ic-add"/></svg><span>Processor</span></div>
+  </div>
+
+  <!-- ══ LIBRARY ══ -->
+  <div class="screen" id="scr-library">
+    <div class="hdr">
+      <button class="hdr-icon-btn" id="libBack" style="display:none" onclick="renderZynBankList()"><svg class="ic"><use href="#ic-back"/></svg></button>
+      <div class="hdr-title"><div class="t-name" id="libTitle">Library</div><div class="t-sub">Snapshots &amp; scenes</div></div>
+      <button class="hdr-icon-btn" id="libAdd" title="Add Bank" onclick="addZynBankPrompt()"><svg class="ic"><use href="#ic-add"/></svg></button>
+    </div>
+    <div class="lib-scroll" id="libScroll">
+      <div class="placeholder"><svg class="ic"><use href="#ic-library"/></svg><p>Loading&hellip;</p></div>
+    </div>
+  </div>
+
+  <!-- ══ MIXER ══ -->
+  <div class="screen" id="scr-mixer">
+    <div class="hdr"><div class="hdr-title"><div class="t-name">Mixer</div><div class="t-sub" id="mixerSub">&nbsp;</div></div></div>
+    <div class="mixer-wrap" id="mixerWrap">
+      <div class="mix-empty">Loading&hellip;</div>
+    </div>
+  </div>
+
+  <!-- ══ VOICES ══ -->
+  <div class="screen" id="scr-voices">
+    <div class="hdr"><div class="hdr-title"><div class="t-name">Voices</div><div class="t-sub">What's layered right now</div></div></div>
+    <div class="voices-scroll" id="voicesScroll">
+      <div class="placeholder"><svg class="ic"><use href="#ic-layers"/></svg><p>Loading&hellip;</p></div>
+    </div>
+  </div>
+
+  <!-- ══ INSPECTOR (full-screen overlay, not a tab) ══ -->
+  <div class="screen overlay" id="scr-inspector">
+    <div class="insp-hdr">
+      <button class="hdr-icon-btn" onclick="closeInspector()"><svg class="ic"><use href="#ic-back"/></svg></button>
+      <div class="insp-title"><div class="i-eng" id="inspEngine">&nbsp;</div><div class="i-chain" id="inspChain">&nbsp;</div></div>
+    </div>
+    <div class="insp-body" id="inspBody">
+      <div class="placeholder"><p>Loading&hellip;</p></div>
+    </div>
+  </div>
+
+  <div class="tabbar" id="tabbar">
+    <button class="active" data-tab="rack" onclick="setZynTab('rack')"><svg class="ic"><use href="#ic-rack"/></svg>Rack</button>
+    <button data-tab="library" onclick="setZynTab('library')"><svg class="ic"><use href="#ic-library"/></svg>Library</button>
+    <button data-tab="mixer" onclick="setZynTab('mixer')"><svg class="ic"><use href="#ic-fader"/></svg>Mixer</button>
+    <button data-tab="voices" onclick="setZynTab('voices')"><svg class="ic"><use href="#ic-layers"/></svg>Voices</button>
+  </div>
+
+  <!-- Chain action sheet (long-press / right-click a chain chip) -->
+  <div class="backdrop" id="chainActBackdrop" onclick="closeSheet('chainAct')"></div>
+  <div class="sheet" id="chainActSheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr"><h3 id="chainActTitle">Chain</h3><div class="close-x" onclick="closeSheet('chainAct')"><svg class="ic"><use href="#ic-close"/></svg></div></div>
+    <div class="sheet-body" id="chainActBody" style="padding-top:4px"></div>
+  </div>
+
+  <!-- Processor action sheet (long-press / right-click a processor row) -->
+  <div class="backdrop" id="procActBackdrop" onclick="closeSheet('procAct')"></div>
+  <div class="sheet" id="procActSheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr"><h3 id="procActTitle">Processor</h3><div class="close-x" onclick="closeSheet('procAct')"><svg class="ic"><use href="#ic-close"/></svg></div></div>
+    <div class="sheet-body" id="procActBody" style="padding-top:4px"></div>
+  </div>
+
+  <!-- Add processor sheet: search + engines grouped by category -->
+  <div class="backdrop" id="addProcBackdrop" onclick="closeSheet('addProc')"></div>
+  <div class="sheet" id="addProcSheet" style="max-height:86%">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr"><h3>Add Processor</h3><div class="close-x" onclick="closeSheet('addProc')"><svg class="ic"><use href="#ic-close"/></svg></div></div>
+    <div style="padding:0 14px 10px">
+      <div class="insp-search"><svg class="ic"><use href="#ic-search"/></svg><input id="engSearch" placeholder="Search engines&hellip;" oninput="renderEngineList()"></div>
+      <label style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--text-dim)">
+        <input type="checkbox" id="engParallel"> Parallel (layer with existing)
+      </label>
+    </div>
+    <div class="sheet-body" id="addProcBody"></div>
+  </div>
+
+  <!-- Snapshot action sheet (Library) -->
+  <div class="backdrop" id="snapActBackdrop" onclick="closeSheet('snapAct')"></div>
+  <div class="sheet" id="snapActSheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr"><h3 id="snapActTitle">Snapshot</h3><div class="close-x" onclick="closeSheet('snapAct')"><svg class="ic"><use href="#ic-close"/></svg></div></div>
+    <div class="sheet-body" id="snapActBody" style="padding-top:4px"></div>
+  </div>
+
+  <!-- Bank action sheet (long-press a bank row) -->
+  <div class="backdrop" id="bankActBackdrop" onclick="closeSheet('bankAct')"></div>
+  <div class="sheet" id="bankActSheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr"><h3 id="bankActTitle">Bank</h3><div class="close-x" onclick="closeSheet('bankAct')"><svg class="ic"><use href="#ic-close"/></svg></div></div>
+    <div class="sheet-body" id="bankActBody" style="padding-top:4px"></div>
+  </div>
+
+  <!-- Preset picker sheet (Inspector) -->
+  <div class="backdrop" id="presetPickBackdrop" onclick="closeSheet('presetPick')"></div>
+  <div class="sheet" id="presetPickSheet" style="max-height:80%">
+    <div class="sheet-grab"></div>
+    <div class="sheet-hdr"><h3 id="presetPickTitle">Presets</h3><div class="close-x" onclick="closeSheet('presetPick')"><svg class="ic"><use href="#ic-close"/></svg></div></div>
+    <div class="sheet-body" id="presetPickBody"></div>
+  </div>
+
+  </div><!-- /#app-zynthian -->
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<!-- Shared engine core: socket, event dispatch, RPCs, suspend guard.
+     Desktop loads the same file. -->
+<script>window.TP_BLE = 1; window.TP_BLE_SEED = {"/api/blocks":{"h":"8da749c295cd100901a6c7d70a8e618507a253c5","file":"seed/api_blocks.json"},"/api/model_loudness":{"h":"f438081d449e290e0dffbef5d985a9b7eba44c61","file":"seed/api_model_loudness.json"}};</script>
+<script src="static/js/tp_ble.js?v=37497a17ce"></script>
+<script src="static/js/live_graph.js?v=ee8e08feb9"></script>
+<script src="static/js/tp_engine.js?v=4829cd5ace"></script>
+<script src="static/js/tp_snapshots.js?v=3de49ad15a"></script>
+<script src="static/js/mobile-state.js?v=caa9d03bf0"></script>
+<script src="static/js/mobile-drag.js?v=fa33bd6e01"></script>
+<script src="static/js/mobile-chain.js?v=f4a54bf2b6"></script>
+<script src="static/js/mobile-models.js?v=3499d422a1"></script>
+<script src="static/js/model_level.js?v=ad522ef434"></script>
+<script src="static/js/xy_pad.js?v=e48c458b5e"></script>
+<script src="static/js/mobile-params.js?v=e77a7d10c1"></script>
+<script src="static/js/mobile-parallel.js?v=25cc1f7c8b"></script>
+<script src="static/js/mobile-palette.js?v=e6af5105e7"></script>
+<script src="static/js/mobile-tools.js?v=9d340fe56b"></script>
+<script src="static/js/mobile-ws.js?v=9a424cd601"></script>
+<script src="static/js/mobile-play.js?v=b5b8f7bcf2"></script>
+<script src="static/js/mobile-presets.js?v=35f7a1a56c"></script>
+<script src="static/js/mobile-banks.js?v=d3c6b8f86b"></script>
+<script src="static/js/mobile-app.js?v=5fe7908f83"></script>
+<script src="static/js/zynm-state.js?v=6ca61e84d0"></script>
+<script src="static/js/zynm-rack.js?v=c5cb61a2c2"></script>
+<script src="static/js/zynm-inspector.js?v=33d5460bed"></script>
+<script src="static/js/zynm-library.js?v=b4f4064e3b"></script>
+<script src="static/js/zynm-mixer.js?v=36219858bc"></script>
+<script src="static/js/zynm-voices.js?v=83da5fdc82"></script>
+<script src="static/js/zynm-app.js?v=6ebf220df2"></script>
+<script>
+/* Restore whichever mode the user last flipped to. Runs after every
+ * script above has defined its globals, so setAppMode() (and, if
+ * restoring into Zynthian mode, initZynApp()/startLivePoll()) can
+ * call straight through safely. */
+setAppMode(localStorage.getItem('tonepi-mobile-mode') === 'zynthian' ? 'zynthian' : 'tonepi');
+</script>
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});</script>
+</body>
+</html>

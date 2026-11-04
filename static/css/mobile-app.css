@@ -1,0 +1,357 @@
+/* TonePi Mobile — standalone PWA styles.
+   Design source of truth: agy rounds 1-2 mockup (nav shell + Designer
+   screen). Tokens reused verbatim from css/style.css :root — this file
+   does not touch the desktop app's own CSS. */
+:root{
+  --bg:#0f0f1a; --bg2:#1a1a2e; --bg3:#16213e;
+  --accent:#e94560; --accent2:#0f3460;
+  --text:#e0e0e0; --text-dim:#888; --border:#2a2a3e;
+  --bg-inset:#0a0a12;
+  --accent-hi:#f05a74;
+  --ok:#10b981; --info:#0dcaf0; --warn:#f5a623;
+  --cat-amp:#ff5c5c; --cat-cab:#5c8aff; --cat-dyn:#f5d44f; --cat-mod:#b35cff;
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+/* App-like touch UI, not a text-reading page — no control/label/chip
+   anywhere has a legitimate reason to go into native text-selection
+   mode from a long-press or a scroll-drag. Blanket-disabled, with
+   inputs/textareas (the tap-to-edit param value fields) explicitly
+   re-enabled since those genuinely need select/retype to work. */
+*{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+input,textarea{user-select:text;-webkit-user-select:text;-webkit-touch-callout:default}
+/* This product has never had a light mode (css/style.css commits to
+   --bg:#0f0f1a with no override anywhere) — paint dark unconditionally,
+   no media query, no data-theme stamps. */
+html,body{margin:0;padding:0;background:#000;overscroll-behavior-y:none}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--text);
+  display:flex;justify-content:center;align-items:flex-start;
+  min-height:100vh;min-height:100dvh;
+}
+.mono{font-family:'SF Mono',Menlo,monospace;font-variant-numeric:tabular-nums}
+svg.ic{width:1em;height:1em;display:inline-block;vertical-align:-0.15em;fill:none;
+  stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Phone shell ── */
+.phone{width:430px;height:932px;background:var(--bg);position:relative;overflow:hidden;
+  display:flex;flex-direction:column}
+@media (min-width:431px){
+  body{padding:40px 20px}
+  .phone{border-radius:54px;border:10px solid #1c1c22;
+    box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px #000}
+  .phone::before{content:"";position:absolute;top:16px;left:50%;translate:-50% 0;
+    width:120px;height:34px;background:#000;border-radius:20px;z-index:50}
+}
+@media (max-width:430px){.phone{width:100vw;height:100dvh}}
+
+/* ── Mode flip (TonePi / Zynthian) — sits above both apps' own .hdr,
+   so it (not .hdr) owns the safe-area/notch inset now. Only screens
+   that render *underneath* it need the shorter .hdr padding below —
+   the Zynthian Inspector is a full-bleed .screen.overlay that covers
+   this bar too, so .insp-hdr (zynthian-mobile.css) keeps its own
+   full safe-t inset unchanged. ── */
+.mode-flip-wrap{flex-shrink:0;padding:calc(var(--safe-t) + 8px) 14px 8px;background:var(--bg3);
+  border-bottom:1px solid var(--border);display:flex;justify-content:center}
+.mode-flip-wrap .chain-toggle{width:100%;max-width:220px}
+.mode-flip-wrap .chain-toggle button{flex:1}
+#app-tonepi, #app-zynthian{display:flex;flex-direction:column;flex:1;min-height:0}
+
+/* ── Header ── */
+.hdr{padding:10px 14px 8px;background:var(--bg3);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hdr-icon-btn{width:36px;height:36px;border-radius:4px;background:var(--bg-inset);
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+  font-size:17px;color:var(--text);flex-shrink:0;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+.hdr-icon-btn.muted{background:linear-gradient(180deg,var(--accent-hi),var(--accent));
+  color:#1a0509;border-color:var(--accent);box-shadow:0 0 8px rgba(233,69,96,.5)}
+.hdr-title{flex:1;min-width:0}
+.hdr-title .chain-name{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-title .chain-sub{font-size:11px;color:var(--text-dim);margin-top:1px}
+.hdr-title .chain-sub.dirty{color:var(--warn)}
+.chain-toggle{display:flex;background:var(--bg-inset);border-radius:4px;padding:2px;
+  border:1px solid var(--border);box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+.chain-toggle button{border:0;background:transparent;color:var(--text-dim);font-size:11px;
+  font-weight:700;padding:5px 9px;border-radius:2px}
+.chain-toggle button.active{background:linear-gradient(180deg,var(--accent-hi),var(--accent));
+  color:#1a0509;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+
+/* ── Status headband ── */
+.headband{display:flex;align-items:center;gap:10px;padding:6px 14px;background:var(--bg2);
+  border-bottom:1px solid var(--border);flex-shrink:0;font-size:10px;color:var(--text-dim)}
+.meter{display:flex;align-items:center;gap:5px;flex:1;min-width:0}
+.meter-track{flex:1;height:5px;border-radius:2px;background:var(--bg-inset);overflow:hidden;
+  position:relative;box-shadow:inset 0 1px 2px rgba(0,0,0,.7)}
+.meter-fill{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:2px;
+  background:linear-gradient(90deg,var(--ok),var(--ok) 70%,var(--warn));transition:width .12s linear}
+.meter-fill.clip{background:var(--accent)}
+.meter-val{width:32px;text-align:right;flex-shrink:0}
+.headband .divider{width:1px;height:16px;background:var(--border)}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:var(--info);flex-shrink:0;
+  box-shadow:0 0 5px var(--info)}
+.pill-dot.off{background:var(--text-dim);box-shadow:none}
+
+/* ── Scroll area ── */
+.screen{flex:1;min-height:0;display:none;flex-direction:column;overflow:hidden}
+.screen.active{display:flex}
+
+/* ── Chain lane ── */
+.chain-lane-wrap{flex-shrink:0;border-bottom:1px solid var(--border);background:var(--bg)}
+.chain-lane-label{font-size:10px;letter-spacing:.08em;color:var(--text-dim);
+  text-transform:uppercase;padding:10px 14px 4px;font-weight:700}
+.chain-lane{display:flex;gap:8px;padding:2px 14px 14px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chain-lane::-webkit-scrollbar{display:none}
+.block-chip{flex-shrink:0;width:86px;padding:10px 8px 8px;background:var(--bg2);
+  border:1px solid var(--border);border-top:1px solid rgba(255,255,255,.08);
+  border-radius:4px;display:flex;flex-direction:column;align-items:center;gap:4px;
+  position:relative;border-left:3px solid var(--chip-color,var(--border))}
+.block-chip.selected{border-color:var(--accent);border-left-color:var(--accent);
+  box-shadow:0 0 0 1px var(--accent),0 4px 14px rgba(233,69,96,.3)}
+.block-chip.bypassed{opacity:.5}
+/* user-select:none is now a global default (see the top of this
+   file) -- these per-element rules are superseded, no longer needed. */
+.block-chip .b-name{font-size:11px;font-weight:600;text-align:center;line-height:1.25}
+.block-chip .b-cat{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em}
+.block-chip .bypass-dot{position:absolute;top:6px;right:6px;width:6px;height:6px;
+  border-radius:50%;background:var(--ok);box-shadow:0 0 4px var(--ok)}
+.block-chip.bypassed .bypass-dot{background:var(--text-dim);box-shadow:none}
+/* Drag handle: touch-action:none has to be set on the actual drag
+   target BEFORE a touch begins, not toggled mid-gesture (the browser
+   decides scroll-vs-not at touchstart and won't reconsider once a
+   scroll is already underway, even with preventDefault() later) — so
+   dragging can't just live on the whole chip, or it fights the chain
+   lane's own horizontal scroll and mostly loses. A dedicated handle
+   is the standard fix (same idiom as Trello/iOS list reordering).
+   Sized as a real touch target (not a thin decorative strip) — a
+   14px-tall handle proved unreliable to actually hit on a real
+   finger, silently breaking both drag and the long-press action
+   sheet since they both live behind this one target now. */
+.block-chip .chip-handle{width:100%;flex:1;min-height:32px;display:flex;align-items:flex-end;
+  justify-content:center;padding-bottom:6px;touch-action:none;-webkit-touch-callout:none}
+.block-chip .chip-handle::after{content:"";width:28px;height:3px;border-radius:2px;background:var(--border)}
+.block-chip.selected .chip-handle::after{background:var(--accent)}
+.add-chip{flex-shrink:0;width:52px;display:flex;align-items:center;justify-content:center;
+  border:1px dashed var(--border);border-radius:4px;color:var(--text-dim);font-size:20px}
+
+/* ── Touch drag-and-drop (mobile-drag.js) — chain lane + parallel
+   lanes. Ghost/placeholder/insert-line only; the long-press-to-arm
+   timing lives entirely in JS. ── */
+.block-chip.drag-armed{transform:scale(1.05);box-shadow:0 10px 30px rgba(0,0,0,.6);opacity:.92;z-index:5}
+.block-chip.drag-placeholder{background:transparent;border-style:dashed;border-left-style:dashed}
+.block-chip.drag-placeholder .b-name,.block-chip.drag-placeholder .b-cat,
+.block-chip.drag-placeholder .bypass-dot{visibility:hidden}
+.drag-ghost{position:fixed;z-index:9999;pointer-events:none;transform:scale(1.05);opacity:.94;
+  box-shadow:0 14px 40px rgba(0,0,0,.7);border-color:var(--accent)}
+.drag-ghost.drag-snapback{transition:left .15s ease-out,top .15s ease-out}
+.drag-insert-line{position:absolute;top:6px;bottom:6px;width:4px;background:var(--accent);
+  border-radius:2px;box-shadow:0 0 8px var(--accent);z-index:4;display:none;pointer-events:none}
+[data-drop-container]{position:relative}
+[data-drop-container].drag-hover-target{background:rgba(233,69,96,.05)}
+
+/* ── Parallel routing node editor (mobile-parallel.js) — lane strips
+   reuse .chain-lane-wrap/.chain-lane-label/.chain-lane/.block-chip/
+   .add-chip verbatim; these are the few genuinely new pieces. ── */
+.pal-lane-label-row{display:flex;align-items:center;justify-content:space-between}
+.lane-rm-btn{width:24px;height:24px;border-radius:4px;background:var(--bg-inset);border:1px solid var(--border);
+  color:var(--cat-amp);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lane-rm-btn svg.ic{width:13px}
+.add-lane-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:calc(100% - 28px);
+  margin:4px 14px 14px;padding:11px;border-radius:6px;background:var(--bg2);border:1px dashed var(--border);
+  color:var(--text-dim);font-size:13px;font-weight:700}
+.add-lane-btn svg.ic{width:15px}
+.param-back-btn{flex-shrink:0}
+
+/* ── Param editor ── */
+.param-area{flex:1;min-height:0;overflow-y:auto;padding-bottom:120px}
+.snap-row{display:flex;gap:6px;padding:12px 14px;overflow-x:auto;
+  border-bottom:1px solid var(--border);scrollbar-width:none}
+.snap-row::-webkit-scrollbar{display:none}
+.snap-pill{flex-shrink:0;padding:6px 12px;border-radius:3px;font-size:12px;font-weight:600;
+  background:var(--bg-inset);border:1px solid var(--border);color:var(--text-dim);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+.snap-pill.active{background:linear-gradient(180deg,var(--accent-hi),var(--accent));
+  border-color:var(--accent);color:#1a0509;box-shadow:0 2px 4px rgba(233,69,96,.3)}
+.param-block-hdr{padding:16px 14px 4px;display:flex;align-items:center;gap:8px}
+.param-block-hdr .cat-spine{width:4px;height:22px;border-radius:1px;background:var(--chip-color,var(--accent))}
+.param-block-hdr h2{font-size:17px;margin:0;font-weight:700}
+.param-block-hdr .b-cat{font-size:11px;color:var(--text-dim);margin-left:auto;
+  text-transform:uppercase;letter-spacing:.05em}
+.param-row{padding:14px 14px 6px}
+.param-row .p-label-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:9px;gap:8px}
+.param-row .p-label{color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.param-row .p-val{color:var(--accent);font-weight:700;cursor:pointer;flex-shrink:0;
+  border-bottom:1px dashed rgba(233,69,96,.4);padding-bottom:1px}
+.param-row .p-val.readonly{color:var(--text-dim);cursor:default;border-bottom-color:transparent}
+.param-row .p-val-input{color:var(--accent);font-weight:700;font-size:13px;
+  font-family:'SF Mono',Menlo,monospace;text-align:right;width:64px;
+  background:var(--bg-inset);border:1px solid var(--accent);border-radius:3px;
+  padding:2px 4px;box-shadow:inset 0 1px 3px rgba(0,0,0,.7);-moz-appearance:textfield}
+.param-row .p-val-input::-webkit-outer-spin-button,
+.param-row .p-val-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.param-row .p-val-input::selection{background:var(--accent);color:#1a0509}
+.param-row.raw .p-label::after{content:" (raw)";color:var(--text-dim);font-weight:400;font-size:11px}
+
+.fader{position:relative;height:32px;display:flex;align-items:center}
+.fader-track{position:absolute;left:0;right:0;height:6px;border-radius:3px;
+  background:var(--bg-inset);box-shadow:inset 0 1px 3px rgba(0,0,0,.8)}
+.fader-fill{position:absolute;left:0;height:6px;border-radius:3px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent))}
+.fader input[type=range]{position:relative;width:100%;height:32px;margin:0;
+  -webkit-appearance:none;background:transparent;z-index:2}
+.fader input[type=range]::-webkit-slider-runnable-track{height:32px;background:transparent}
+.fader input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:32px;
+  border-radius:4px;margin-top:0;
+  background:linear-gradient(180deg,#2a2a3e,#161626);border:1px solid #000;
+  box-shadow:0 4px 6px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.15);
+  position:relative}
+.fader input[type=range]::-moz-range-thumb{width:20px;height:32px;border-radius:4px;
+  background:linear-gradient(180deg,#2a2a3e,#161626);border:1px solid #000;
+  box-shadow:0 4px 6px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.15)}
+.fader input[type=range]::-moz-range-track{height:6px;background:transparent}
+
+.param-enum-row{padding:0 14px 6px}
+.param-enum-row select{width:100%;padding:9px 10px;border-radius:4px;background:var(--bg-inset);
+  border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:600}
+
+/* ── FAB ── */
+.fab-wrap{position:absolute;right:16px;bottom:calc(84px + var(--safe-b));z-index:40}
+.fab{display:flex;align-items:center;gap:8px;padding:14px 22px 14px 18px;
+  background:linear-gradient(180deg,var(--accent-hi),var(--accent));color:#1a0509;
+  border-radius:6px;font-size:15px;font-weight:700;
+  box-shadow:0 8px 24px rgba(233,69,96,.4),inset 0 1px 1px rgba(255,255,255,.25)}
+.fab.stopped{background:var(--bg2);color:var(--text);border:1px solid var(--border);
+  box-shadow:0 8px 20px rgba(0,0,0,.5)}
+.fab.busy{opacity:.6;pointer-events:none}
+.fab svg.ic{width:16px;height:16px}
+
+/* ── Presets screen: saved-chain drill-down + per-block preset lists ── */
+.presets-scroll{flex:1;overflow-y:auto;padding:0 14px calc(20px + var(--safe-b))}
+.presets-scroll .cat-row{border-bottom:1px solid var(--border)}
+.presets-scroll .subcat-hdr{background:var(--bg)}
+.preset-check{margin-left:auto;color:var(--ok);font-weight:700}
+
+/* ── System tab: power/recovery footer, below the Banks list ── */
+.system-settings{flex-shrink:0;border-top:1px solid var(--border);
+  padding:0 14px calc(10px + var(--safe-b));background:var(--bg3)}
+.system-settings .of-item{padding:12px 4px}
+.of-item.danger{color:var(--cat-amp)}
+.of-item.danger svg.ic{color:var(--cat-amp)}
+
+/* ── Bottom tab bar ── */
+.tabbar{flex-shrink:0;display:flex;background:var(--bg3);border-top:1px solid var(--border);
+  padding:8px 4px calc(6px + var(--safe-b))}
+.tabbar button{flex:1;background:transparent;border:0;display:flex;flex-direction:column;
+  align-items:center;gap:4px;padding:4px 0;color:var(--text-dim);font-size:10.5px;font-weight:600}
+.tabbar button svg.ic{width:21px;height:21px}
+.tabbar button.active{color:var(--accent)}
+
+/* ── Sheets ── */
+.backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);z-index:60;opacity:0;
+  pointer-events:none;transition:opacity .22s}
+.backdrop.show{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:61;background:var(--bg3);
+  border-radius:10px 10px 0 0;border-top:1px solid var(--border);
+  transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.3,1);
+  max-height:74%;display:flex;flex-direction:column;padding-bottom:var(--safe-b)}
+.sheet.show{transform:translateY(0)}
+.sheet-grab{width:36px;height:4px;border-radius:2px;background:var(--border);margin:10px auto 6px}
+.sheet-hdr{padding:2px 18px 12px;display:flex;align-items:center;gap:10px}
+.sheet-hdr h3{margin:0;font-size:16px}
+.sheet-hdr .back-btn{width:30px;height:30px;border-radius:4px;background:var(--bg-inset);
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+  color:var(--text-dim);flex-shrink:0}
+.sheet-hdr .close-x{margin-left:auto;width:30px;height:30px;border-radius:4px;
+  background:var(--bg-inset);border:1px solid var(--border);display:flex;align-items:center;
+  justify-content:center;color:var(--text-dim);flex-shrink:0}
+.sheet-body{overflow-y:auto;padding:0 14px 20px}
+.pal-cat{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);
+  padding:14px 4px 8px;font-weight:700}
+.pal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.pal-block{height:48px;padding:0 10px;background:var(--bg2);border:1px solid var(--border);
+  border-top:1px solid rgba(255,255,255,.08);border-left:3px solid var(--chip-color,var(--border));
+  border-radius:4px;display:flex;align-items:center;font-size:12px;font-weight:600}
+
+/* ── Model/bank chooser sheet (mobile-models.js) — NAM/Neural/IR/
+   Wavetable/Sample Guitar. Reuses .subcat-hdr/.of-item/.preset-check
+   verbatim for the grouped results list. ── */
+.model-search{width:100%;padding:10px 12px;border-radius:6px;background:var(--bg-inset);
+  border:1px solid var(--border);color:var(--text);font-size:14px}
+.model-count-info{font-size:11px;color:var(--text-dim);padding:10px 4px 2px}
+.model-picker-sub{font-size:11px;color:var(--text-dim);margin-top:2px}
+.model-picker-row{cursor:pointer}
+.model-picker-row .p-val{display:flex;align-items:center;gap:4px}
+.model-picker-row .p-val svg.ic{width:13px}
+
+/* ── Add Block sheet, level 1: category list ── */
+.cat-row{display:flex;align-items:center;height:56px;padding:0 4px;
+  border-bottom:1px solid var(--border);font-size:14px;font-weight:600}
+.cat-row .cat-count{margin-left:auto;background:var(--bg2);color:var(--text-dim);
+  font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-right:8px}
+.cat-row svg.ic{color:var(--text-dim);width:16px}
+
+/* ── Add Block sheet, level 2: sticky subcategory headers (nested
+ * categories only — Airwindows / PureData / LV2 all fold a bare flat
+ * entry + real sub-buckets into one tree, mirroring palette.js) ── */
+.subcat-hdr{position:sticky;top:0;height:30px;display:flex;align-items:center;
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--text-dim);
+  font-weight:700;background:var(--bg3);z-index:1}
+.subcat-hdr.collapsible{cursor:pointer;gap:6px}
+.subcat-hdr.collapsible .subcat-count{margin-left:4px;opacity:.7;font-weight:400}
+.subcat-hdr.collapsible svg.ic{width:13px;margin-left:auto;transition:transform .18s;
+  color:var(--text-dim);transform:rotate(90deg)}
+.subcat-hdr.collapsible.collapsed svg.ic{transform:rotate(0deg)}
+.subcat-body{overflow:hidden;max-height:none}
+.subcat-body.collapsed{display:none}
+
+/* ── Block-action sheet (long-press mobile / right-click desktop) ── */
+.action-row{display:flex;align-items:center;gap:12px;height:52px;padding:0 18px;font-size:15px}
+.action-row svg.ic{width:19px;color:var(--text-dim)}
+.action-row.danger{color:var(--cat-amp)}
+.action-row.danger svg.ic{color:var(--cat-amp)}
+.action-row.disabled{opacity:.35;pointer-events:none}
+.of-item{display:flex;align-items:center;gap:12px;padding:14px 18px;font-size:15px;
+  border-bottom:1px solid var(--border)}
+.of-item svg.ic{width:18px;color:var(--text-dim)}
+.of-item.disabled{color:var(--text-dim)}
+.of-item.disabled svg.ic{opacity:.5}
+
+/* ── Tools grid ── */
+.tools-scroll{flex:1;overflow-y:auto;padding:14px 14px calc(24px + var(--safe-b))}
+.tools-section{font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-dim);padding:14px 2px 8px;font-weight:700}
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tool-card{aspect-ratio:1;background:var(--bg2);border:1px solid var(--border);
+  border-top:1px solid rgba(255,255,255,.08);border-radius:4px;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:8px;text-align:center}
+.tool-card svg.ic{width:24px;height:24px;color:var(--accent)}
+.tool-card .t-lbl{font-size:11px;font-weight:600;line-height:1.2}
+
+.placeholder{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  gap:8px;color:var(--text-dim);padding:40px}
+.placeholder svg.ic{width:34px;height:34px;opacity:.5}
+.placeholder p{font-size:13px;text-align:center;max-width:240px;line-height:1.5;margin:0}
+.placeholder button{margin-top:6px;padding:9px 16px;border-radius:4px;background:var(--accent);
+  color:#1a0509;border:0;font-weight:700;font-size:13px}
+
+/* ── Toast (real-data states the mockup didn't need) ── */
+.toast{position:absolute;left:14px;right:14px;bottom:calc(84px + var(--safe-b));z-index:70;
+  background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:11px 14px;
+  font-size:12.5px;color:var(--text);box-shadow:0 8px 24px rgba(0,0,0,.5);
+  transform:translateY(12px);opacity:0;pointer-events:none;transition:transform .2s,opacity .2s}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* Snapshot switcher in the headband. Accent-bordered so it reads as
+   state ("what is on air") rather than another action control. */
+.snap-select {
+  background: var(--bg3, #1a2235);
+  border: 1px solid var(--accent, #f59e0b);
+  color: var(--text, #e6edf7);
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 3px 6px;
+  max-width: 42vw;
+}
