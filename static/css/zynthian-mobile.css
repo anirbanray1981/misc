@@ -1,0 +1,123 @@
+/* ZynEditor Mobile — page-specific styles.
+   Base tokens/hdr/tabbar/sheet/action-row/of-item/cat-row/subcat-hdr/
+   fader/param-row all come from css/mobile-app.css (linked before this
+   file) — reused verbatim, not redefined here. This file only adds the
+   classes unique to this page: chain strip, rack slot cards, mixer
+   strips, voice rows, and the full-screen inspector overlay. */
+
+.hdr-panic{width:36px;height:36px;border-radius:4px;background:var(--bg-inset);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;color:var(--cat-amp,#ff5c5c);flex-shrink:0}
+
+/* Full-screen inspector overlay — a screen that slides in over the
+   tab content rather than living in the tabbar rotation. */
+.screen.overlay{position:absolute;inset:0;z-index:30;transform:translateX(100%);
+  transition:transform .26s cubic-bezier(.2,.8,.3,1);background:var(--bg)}
+.screen.overlay.active{transform:translateX(0);display:flex}
+
+/* ── Chain selector strip (Rack tab) ── */
+.chain-strip-wrap{flex-shrink:0;border-bottom:1px solid var(--border);background:var(--bg2)}
+.chain-strip-label{font-size:10px;letter-spacing:.08em;color:var(--text-dim);text-transform:uppercase;
+  padding:10px 14px 4px;font-weight:700}
+.chain-strip{display:flex;gap:8px;padding:2px 14px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chain-strip::-webkit-scrollbar{display:none}
+.chain-chip{flex-shrink:0;min-width:78px;padding:9px 12px 8px;background:var(--bg3);border:1px solid var(--border);
+  border-top:1px solid rgba(255,255,255,.08);border-radius:4px;display:flex;flex-direction:column;gap:3px;position:relative}
+.chain-chip.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 4px 14px rgba(233,69,96,.3)}
+.chain-chip .c-num{font-size:9px;color:var(--text-dim);font-weight:700;letter-spacing:.05em}
+.chain-chip .c-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px}
+.chain-chip .c-recv{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 4px var(--ok)}
+.chain-strip .add-chip{flex-shrink:0;width:44px;display:flex;align-items:center;justify-content:center;
+  border:1px dashed var(--border);border-radius:4px;color:var(--text-dim)}
+
+/* ── Rack: slot cards + processor rows ── */
+.rack-scroll{flex:1;overflow-y:auto;padding:14px 14px calc(90px + var(--safe-b))}
+.slot-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin-bottom:12px;overflow:hidden}
+.slot-card-hdr{padding:9px 12px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--text-dim);background:var(--bg3);border-bottom:1px solid var(--border)}
+.slot-card-body{padding:8px}
+.proc-row{display:flex;align-items:center;gap:10px;padding:11px 10px;border-radius:4px;background:var(--bg-inset)}
+.proc-row+.proc-row{margin-top:6px}
+.proc-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.proc-body{flex:1;min-width:0}
+.proc-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proc-preset{font-size:11px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proc-chevron{color:var(--text-dim);flex-shrink:0}
+.parallel-group{border:1px dashed var(--border);border-radius:5px;padding:6px;position:relative;margin-top:8px}
+.parallel-group:first-child{margin-top:0}
+.parallel-group::before{content:"";position:absolute;left:-1px;top:14px;bottom:14px;width:3px;
+  background:var(--accent2);border-radius:2px}
+.parallel-group .proc-row{background:var(--bg2)}
+.parallel-label{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;
+  padding:2px 4px 6px;display:flex;align-items:center;gap:4px}
+.parallel-label svg.ic{width:11px}
+
+.rack-fab{position:absolute;right:16px;bottom:calc(84px + var(--safe-b));z-index:40;display:flex;align-items:center;gap:8px;
+  padding:14px 20px 14px 16px;background:linear-gradient(180deg,var(--accent-hi),var(--accent));color:#1a0509;
+  border-radius:6px;font-size:14px;font-weight:700;box-shadow:0 8px 24px rgba(233,69,96,.4),inset 0 1px 1px rgba(255,255,255,.25)}
+.rack-fab svg.ic{width:16px;height:16px}
+
+/* ── Inspector (full-screen drill-down) ── */
+.insp-hdr{padding:calc(var(--safe-t) + 10px) 14px 12px;background:var(--bg3);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;flex-shrink:0}
+.insp-title{flex:1;min-width:0}
+.insp-title .i-eng{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.insp-title .i-chain{font-size:11px;color:var(--text-dim)}
+.insp-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.insp-preset-btn{margin:14px 14px 6px;padding:13px 14px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:6px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.insp-preset-btn .pb-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em}
+.insp-preset-btn .pb-name{font-size:14px;font-weight:700;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+.insp-preset-btn svg.ic{margin-left:auto;color:var(--text-dim);flex-shrink:0}
+.insp-bank-row{margin:0 14px 6px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.insp-bank-row label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em}
+.insp-bank-row select{flex:1;padding:7px 8px;border-radius:4px;background:var(--bg-inset);border:1px solid var(--border);
+  color:var(--text);font-size:12px}
+.insp-search-wrap{padding:6px 14px 10px;flex-shrink:0}
+.insp-search{width:100%;padding:9px 12px;border-radius:5px;background:var(--bg-inset);border:1px solid var(--border);
+  color:var(--text);font-size:13px;display:flex;align-items:center;gap:8px}
+.insp-search input{background:transparent;border:0;color:var(--text);font-size:13px;flex:1;outline:none}
+.insp-search svg.ic{color:var(--text-dim);flex-shrink:0}
+.insp-scroll{flex:1;overflow-y:auto;padding-bottom:calc(24px + var(--safe-b))}
+
+/* ── Library tab: bank list + snapshot rows + collapsible scenes ── */
+.lib-scroll{flex:1;overflow-y:auto;padding:0 14px calc(20px + var(--safe-b))}
+.snap-row{padding:12px 4px;border-bottom:1px solid var(--border)}
+.snap-row-main{display:flex;align-items:center;gap:8px;cursor:pointer}
+.snap-name{font-size:14px;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.snap-name.loaded::before{content:"\25CF ";color:var(--ok);font-size:10px}
+.snap-pc{font-size:11px;color:var(--text-dim);font-family:'SF Mono',Menlo,monospace;flex-shrink:0}
+
+/* ── Mixer tab: horizontal-scroll vertical faders, Main pinned right ── */
+.mixer-wrap{flex:1;display:flex;min-height:0}
+.mixer-scroll{flex:1;display:flex;gap:10px;padding:16px 10px calc(20px + var(--safe-b)) 14px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.mixer-scroll::-webkit-scrollbar{display:none}
+.mix-strip{flex-shrink:0;width:66px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.mix-strip.zmx-main{width:74px}
+.mix-pan-row{width:100%;padding:0 4px}
+.mix-pan-row input[type=range]{width:100%;height:16px;-webkit-appearance:none;background:transparent;accent-color:var(--accent)}
+.mix-fader-wrap{flex:1;width:100%;display:flex;justify-content:center;padding:4px 0;min-height:200px;position:relative}
+.mix-fader-wrap input[type=range]{
+  -webkit-appearance:slider-vertical;appearance:slider-vertical;
+  writing-mode:vertical-lr;direction:rtl;width:28px;height:100%;padding:0;margin:0;
+  accent-color:var(--accent);background:transparent}
+.mix-db{font-size:10px;color:var(--text-dim);font-family:'SF Mono',Menlo,monospace;flex-shrink:0}
+.mix-btns{display:flex;gap:4px;flex-shrink:0}
+.mix-btn{width:26px;height:22px;border-radius:3px;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  background:var(--bg-inset);border:1px solid var(--border);color:var(--text-dim)}
+.mix-btn.mute.on{background:var(--warn);color:#2a1a00;border-color:var(--warn)}
+.mix-btn.solo.on{background:var(--ok);color:#00291c;border-color:var(--ok)}
+.mix-name{font-size:10px;font-weight:700;text-align:center;line-height:1.2;max-width:66px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+.mix-main{flex-shrink:0;width:82px;display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:16px 6px calc(20px + var(--safe-b));border-left:1px solid var(--border);background:var(--bg2)}
+.mix-empty{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:13px;padding:30px}
+
+/* ── Voices tab ── */
+.voices-scroll{flex:1;overflow-y:auto;padding:0 14px calc(20px + var(--safe-b))}
+.voice-sect{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);
+  padding:14px 4px 8px;font-weight:700}
+.voice-row{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--border)}
+.voice-swatch{width:8px;height:28px;border-radius:2px;flex-shrink:0}
+.voice-body{flex:1;min-width:0}
+.voice-name{font-size:13px;font-weight:600}
+.voice-chain{font-size:11px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
